@@ -1,6 +1,7 @@
 import requests
 import json
 from dataclasses import dataclass,field,asdict
+import argparse
 
 @dataclass
 class Trading:
@@ -45,8 +46,8 @@ def point_out_trade(trade_list):
             print("*"*20)
             print(f"The trading pair {something.name} is now losing by {something.profit}, which is {something.percent:.3f}% in {something.side} position, the entry price was {something.ent_price}")
     print(f"\nThe total number of potential trades: {number_of_potential_trades}")
-def main():
-    tid = 3838
+def main(args):
+    tid = args.id
     data = scrap(tid)
     trade_list = get_batch_data(data)
     point_out_trade(trade_list)
@@ -54,4 +55,9 @@ def main():
     
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--id", type = int, default = 3838, metavar = "portfolio id", help = "id of the portfolio"
+    )
+    args, _ = parser.parse_known_args()
+    main(args)
